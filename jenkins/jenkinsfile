@@ -9,7 +9,7 @@ pipeline {
 
     environment {
         REMOTE_USER = 'ubuntu'
-        REMOTE_HOST = 'xx.xx.xx.xx' // replace with remote IP
+        REMOTE_HOST = '54.204.99.108' // replace with remote IP
         REMOTE_PATH = '/var/www/myapp'
         SSH_KEY_ID = 'deploy-key'
         BACKUP_PATH = "${env.REMOTE_PATH}_backup"
@@ -18,7 +18,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: "${params.BRANCH_NAME}", url: 'https://github.com/yourusername/yourrepo.git'
+                git branch: "${params.BRANCH_NAME}", url: 'https://github.com/khushiRajpoot02/devops.git'
             }
         }
 
