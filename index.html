@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sample HTML Page</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+      background-color: #f4f4f4;
+    }
+    h1 {
+      color: #333;
+    }
+    .box {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+    table, th, td {
+      border: 1px solid #ccc;
+    }
+    th, td {
+      padding: 8px;
+      text-align: left;
+    }
+    input, button {
+      padding: 8px;
+      margin-top: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="box">
+    <h1>Welcome to Sample HTML Page</h1>
+
+    <p>This is a basic example to test HTML structure, styling, and form submission.</p>
+
+    <h2>Form</h2>
+    <form onsubmit="alert('Form submitted!'); return false;">
+      <label for="name">Name:</label><br />
+      <input type="text" id="name" name="name" required /><br /><br />
+      <label for="email">Email:</label><br />
+      <input type="email" id="email" name="email" required /><br /><br />
+      <button type="submit">Submit</button>
+    </form>
+
+    <h2>Table</h2>
+    <table>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Email</th>
+      </tr>
+      <tr>
+        <td>1</td>
+        <td>Alice</td>
+        <td>alice@example.com</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td>Bob</td>
+        <td>bob@example.com</td>
+      </tr>
+    </table>
+
+    <h2>List</h2>
+    <ul>
+      <li>Learn HTML</li>
+      <li>Practice CSS</li>
+      <li>Explore JavaScript</li>
+    </ul>
+  </div>
+
+</body>
+</html>
