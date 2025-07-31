@@ -3,7 +3,7 @@ pipeline {
 
     parameters {
         string(name: 'DEPLOY_VERSION', defaultValue: 'v1.0.0', description: 'Deployment Version')
-        string(name: 'BRANCH_NAME', defaultValue: 'main', description: 'Git Branch Name')
+        string(name: 'BRANCH_NAME', defaultValue: 'master', description: 'Git Branch Name')
         choice(name: 'ENV', choices: ['dev', 'staging', 'prod'], description: 'Deployment Environment')
     }
 
