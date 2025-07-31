@@ -1,0 +1,79 @@
+pipeline {
+    agent any
+
+    parameters {
+        string(name: 'DEPLOY_VERSION', defaultValue: 'v1.0.0', description: 'Deployment Version')
+        string(name: 'BRANCH_NAME', defaultValue: 'main', description: 'Git Branch Name')
+        choice(name: 'ENV', choices: ['dev', 'staging', 'prod'], description: 'Deployment Environment')
+    }
+
+    environment {
+        REMOTE_USER = 'ubuntu'
+        REMOTE_HOST = 'xx.xx.xx.xx' // replace with remote IP
+        REMOTE_PATH = '/var/www/myapp'
+        SSH_KEY_ID = 'deploy-key'
+        BACKUP_PATH = "${env.REMOTE_PATH}_backup"
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: "${params.BRANCH_NAME}", url: 'https://github.com/yourusername/yourrepo.git'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                echo 'Build steps go here (e.g. npm install)'
+            }
+        }
+
+        stage('Backup') {
+            steps {
+                sshagent (credentials: [env.SSH_KEY_ID]) {
+                    sh """
+                    ssh -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} '
+                        if [ -d ${REMOTE_PATH} ]; then
+                            rm -rf ${BACKUP_PATH}
+                            cp -r ${REMOTE_PATH} ${BACKUP_PATH}
+                        fi
+                    '
+                    """
+                }
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                sshagent (credentials: [env.SSH_KEY_ID]) {
+                    sh """
+                    scp -r . ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_PATH}_new || exit 1
+                    ssh ${REMOTE_USER}@${REMOTE_HOST} '
+                        rm -rf ${REMOTE_PATH}
+                        mv ${REMOTE_PATH}_new ${REMOTE_PATH}
+                    '
+                    """
+                }
+            }
+        }
+    }
+
+    post {
+        failure {
+            echo 'Deployment failed, rolling back...'
+            sshagent (credentials: [env.SSH_KEY_ID]) {
+                sh """
+                ssh ${REMOTE_USER}@${REMOTE_HOST} '
+                    if [ -d ${BACKUP_PATH} ]; then
+                        rm -rf ${REMOTE_PATH}
+                        cp -r ${BACKUP_PATH} ${REMOTE_PATH}
+                    fi
+                '
+                """
+            }
+        }
+        success {
+            echo "Deployment successful!"
+        }
+    }
+}
